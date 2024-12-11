@@ -1,0 +1,70 @@
+{% extends 'myapp/base.html' %}
+{% load comment_tags %}
+{% load ratings %}
+{% load base_tags %}
+{% load humanize %}
+{% include 'registration:login.html' %}
+
+
+{% block title %} | {{object.title}}{% endblock %}
+{% block main %}
+
+        <!-- Page Header-->
+        <header class="masthead" style="background-image: url('{{object.thumbnail.url}}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1 style="text-align: center;">{{object.title}}</h1> 
+                            {% if article.is_special %}
+                                <span style="font-size: 14px; color: red;">ویژه</span>
+                                <br>
+                            {% endif %}
+                            <!--<time>{{object.jpublish}}</time>-->
+                            <time>{{object.publish | naturaltime}}</time>
+
+                            <div>{% ratings object %}</div>
+                            <div> بازدیدها: {{object.hits.count}}</div>
+
+                            <!-- <span class="subheading">سامانه مهندسی کامپیوتر</span> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <aside>
+                {% popular_articles %}            
+                {% hot_articles %}
+        </aside>
+
+            <!-- Post Content-->
+            <article class="mb-4">
+                <div class="container px-4 px-lg-5">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                        <div class="col-md-10 col-lg-8 col-xl-7 text-justify">
+                            
+                            {% if object.is_special %}
+                                {% if user.is_authenticated or user.is_special or user == object.author or user.is_superuser%}
+                                    {{object.description|safe}}
+                                {% else %}
+                                    {{article.description|striptags|truncatewords:25}}
+                                    <p class="alert alert-warning">این مقاله ویژه است  برای مشاهده آن به سایت  
+                                        {% url 'login' as login_url %}
+                                        <a class="alert-link" style="text-decoration: none;" href="{{ login_url }}" target="_blank">
+                                            ورود
+                                        </a>
+                                    </p>
+                                {% endif %}
+                            {% else %}
+                               {{object.description|safe}}
+                            {% endif %}
+                            
+                            {% render_comments object request %} 
+                            {% include_bootstrap %} 
+
+                        </div>
+                    </div>
+                </div>
+            </article>
+{% endblock %}

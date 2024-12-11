@@ -1,0 +1,61 @@
+{% load static %}
+
+<div class=" myfont collapse navbar-collapse nav" id="navbarResponsive" style="font-family: Sahel;">
+    <ul class="navbar-nav ms-auto py-4 py-lg-0">
+        <li class="nav-item">
+            <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'myapp:home' %}" style="font-size: 16px;">
+                صفحه اصلی
+            </a>
+        </li>
+    </ul>
+
+
+    {%for cat in categories%}
+        {% if cat.parent == None%}
+            <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'myapp:category' cat.slug %}"> {{cat.title}}</a>
+                    {% if cat.children.active %}
+                        {% include 'myapp/partials/category_loop.html' %}
+                    {% endif %}
+                </li>
+            </ul>
+        {% endif %}
+    {%endfor%}
+
+    
+    <style>
+        .search-container {
+             position: absolute;
+             top: 100px;
+             right: 0;
+         }
+     
+        .search-form {
+             display: flex;
+             align-items: center;
+             justify-content: end;
+         }
+     
+        .search-input {
+             width: 80%;
+             max-width: 1000px;
+             margin-right: 50px;
+             font-size: 16px;
+         }
+     
+        .btn-success {
+             padding: 2px 20px!important;
+             font-size: 16px;
+             border-radius: 5px;
+             font-family: Sahel !important;
+         }
+     </style>
+     
+     <div class="search-container">
+         <form class="search-form" action="{% url 'myapp:search' %}">
+             <input type="text" name="q" class="search-input" placeholder="جستجوی متن">
+             <button class="btn btn-success" type="submit">جستجو</button>
+         </form>
+     </div>
+</div>

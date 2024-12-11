@@ -1,0 +1,100 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+{% load base_tags %}
+{% load ratings %}
+{% load humanize %}
+
+{%block main%}
+
+
+        <!-- Page Header-->
+        <header class="masthead" style="background-image: url('{% static 'myapp/assets/img/home-bg.jpg' %}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1> {% site_name %} </h1>
+                            <!--  <span class="subheading">سامانه مهندسی کامپیوتر </span> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content-->
+        <div class="container px-4 px-lg-5" >
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7" style="font-family: Sahel;">
+                    {% block header %}{% endblock %}
+                    <aside>
+                        {% popular_articles %}
+                        {% hot_articles %}
+                    </aside>
+
+                    
+
+                    {% for article in object_list %}
+                    <!-- Post preview-->
+                    <div class="post-preview">
+                        <a href="{% url 'myapp:article_detail' article.slug%}"> 
+                            <h2 class="post-title">
+                                {{article.title}}
+                                {% if article.is_special %}
+                                    <span style="font-size: 14px; color: red;">ویژه</span>
+                                {% endif %}
+                            </h2>
+
+                            <div>{% ratings article %}</div> 
+
+                            <h3 class="post-subtitle">{{article.description|striptags|safe|truncatewords:25}}</h3>
+                        </a>
+                        <p class="post-meta">
+                            نوشته شده توسط
+                            <a href="{% url 'myapp:author' article.author %}">
+                                {{article.author.get_full_name}} 
+                            </a>
+                            <!--{{article.jpublish}}-->
+                            {{article.publish | naturaltime}}
+
+                        </p>
+
+                        <div> 
+                            {%for cat in article.category.active%}
+                                <a href="{% url 'myapp:category' cat.slug %}"> #{{cat.title}} </a>
+                            {%endfor%}
+                        </div>
+
+                        <div> بازدیدها: {{article.hits.count}}</div>
+
+                     </div style="myfont" >
+                     <!-- Divider-->
+                     <hr class="my-4" />
+                     {% empty %}
+                     <p>متاسفانه محتوایی برای نمایش وجود ندارد.</p>
+                    {% endfor %}
+                
+                    <!-- Pager-->
+                     {% if is_paginated %}
+                    <!-- Pager -->
+
+                        <div class="pagination-container" style="text-align: center; width: 100%; margin: 20px auto;">
+                        {% if is_paginated %}
+                            {% if page_obj.has_previous %}
+                                <a class="btn btn-primary text-uppercase" style="font-family:Sahel" href="{% block previous_page_url %}{% endblock %}">
+                                ► پست های جدید
+                                </a>
+                            {% endif %}
+    
+                            {% if page_obj.has_next%}
+                                <a class="btn btn-primary text-uppercase" style="font-family:Sahel" href="{% block next_page_url %}{% endblock %}">
+                                پست های قدیمی ◄
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+{%endblock%}

@@ -1,0 +1,31 @@
+{% load static %}
+
+<link href="{% static 'myapp/css/rtl.css' %}" rel="stylesheet" />
+
+<style> 
+    .popular_articles {
+        border:1px solid #bfbfbf;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: -5px 5px #d5d5d5;
+        margin-bottom: 20px;
+    }
+    
+    aside {
+        width: 240px;
+        left: 15px; /* Position it at the far left edge of its parent container */
+        top: 100%; /* Position it below the header by setting "top" property to "100%" */
+        position: absolute;
+    }
+</style>
+
+
+<div class="popular_articles" style="text-align: right; font-family: Sahel;">
+    <h2 class="h5 myfont" style="font-family: Sahel;">{{title}}</h2>
+    <hr>
+    {% for a in articles %}
+        <div>
+            <a href="{% url 'myapp:article_detail' a.slug %}">{{a.title}}</a>
+        </div>
+    {% endfor %}
+</div>

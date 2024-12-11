@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="{% static 'registration/login/css/rtl.css' %}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title-met %}{% endblock %}</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5dc; /* Light yellow */
+        }
+        .container {
+            text-align: center;
+        }
+        a {
+            color: #4b0082; /* Purple */
+            text-decoration: none;
+            border-bottom: 1px solid #4b0082;
+            padding-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+    {% block main %}
+    {% endblock %}
+</body>
+</html>
